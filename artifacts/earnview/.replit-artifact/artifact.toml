@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "EarnView"
+version = "1.0.0"
+id = "artifacts/earnview"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22405
+
+[services.development]
+run = "pnpm --filter @workspace/earnview run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/earnview", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/earnview/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22405"
+BASE_PATH = "/"

@@ -1,0 +1,382 @@
+Create a full-stack web application called "EarnView" — a professional rewards platform where users can earn points/money by completing sponsored tasks, watching approved promotional videos, and engaging with the platform.
+
+The platform should be designed like a modern fintech/rewards application with a clean, trustworthy, mobile-friendly interface.
+
+TECHNOLOGY STACK:
+- Frontend: React + Tailwind CSS
+- Backend: Node.js + Express
+- Database: PostgreSQL
+- Authentication: Secure email/password authentication
+- Use modern UI components and responsive design
+
+BRAND DESIGN:
+Create a professional design using:
+- White background
+- Blue primary colors
+- Green colors for rewards, success, and earnings
+- Clean typography
+- Modern cards
+- Smooth animations
+- Mobile-first interface
+
+------------------------------------------------
+
+USER FEATURES:
+
+1. USER REGISTRATION & AUTHENTICATION
+
+Create:
+- Sign up page
+- Login page
+- Forgot password system
+- Secure password encryption
+- User profile creation
+
+Users should have:
+- Username
+- Email
+- Profile picture
+- Referral code
+- Account creation date
+
+------------------------------------------------
+
+2. USER DASHBOARD
+
+Create a modern dashboard showing:
+
+- Total earnings balance
+- Available tasks
+- Completed tasks
+- Daily streak
+- User level
+- Achievement progress
+- Referral earnings
+- Withdrawal status
+
+Use attractive cards and charts.
+
+------------------------------------------------
+
+3. TASK & REWARD SYSTEM
+
+Create a task system where users can earn rewards.
+
+Features:
+- View available sponsored tasks
+- Watch promotional videos
+- Complete tasks with timers
+- Verify task completion
+- Reward users after successful completion
+- Store task history
+
+Prevent:
+- Multiple rewards for the same task
+- Fake completions
+- Bot activity
+
+------------------------------------------------
+
+4. WALLET SYSTEM
+
+Create a wallet page:
+
+Features:
+- Current balance
+- Total earned
+- Transaction history
+- Reward records
+- Withdrawal requests
+
+Withdrawal system:
+- Minimum withdrawal amount
+- Select payment method
+- Submit withdrawal request
+- Track withdrawal status
+
+Admin can:
+- Approve withdrawals
+- Reject withdrawals
+- View payment history
+
+------------------------------------------------
+
+5. REFERRAL SYSTEM
+
+Create a referral program:
+
+Features:
+- Unique referral link/code
+- Invite friends
+- Track referrals
+- Referral earnings
+- Referral statistics
+
+------------------------------------------------
+
+6. USER PROFILE CUSTOMIZATION
+
+Create a profile settings page.
+
+Users can:
+- Upload profile picture
+- Change username
+- Edit personal information
+- Change password
+- Manage notifications
+- Customize dashboard appearance
+
+------------------------------------------------
+
+7. INTERFACE CUSTOMIZATION
+
+Allow users to personalize the app:
+
+Options:
+- Light mode
+- Dark mode
+- Dashboard layout selection
+- Compact or detailed view
+- Notification preferences
+
+------------------------------------------------
+
+8. ACHIEVEMENTS & BADGES SYSTEM
+
+Create a gamification achievement system.
+
+Add:
+
+Achievement page:
+- Earned badges
+- Locked badges
+- Progress tracking
+
+Examples:
+
+🏅 First Task Completed
+🔥 7-Day Streak
+⭐ 100 Tasks Completed
+👥 Successful Referrer
+💎 Premium Member
+
+Display badges on user profiles.
+
+------------------------------------------------
+
+9. DAILY STREAK REWARD SYSTEM
+
+Create a daily activity system:
+
+Features:
+- Daily login tracking
+- Streak counter
+- Streak calendar
+- Daily bonus rewards
+- Reminder notifications
+
+Reset streak when users miss required days.
+
+------------------------------------------------
+
+10. USER LEVEL SYSTEM
+
+Create XP and levels.
+
+Users gain XP from:
+- Completing tasks
+- Daily logins
+- Referrals
+- Achievements
+
+Example levels:
+
+Level 1: Beginner
+Level 2: Active User
+Level 3: Pro User
+Level 4: Elite Member
+
+Display:
+- Current level
+- XP progress bar
+- Next level requirement
+
+------------------------------------------------
+
+11. LEADERBOARD SYSTEM
+
+Create a leaderboard page.
+
+Rank users by:
+
+- Highest earnings
+- Most tasks completed
+- Best referrals
+- Longest streak
+
+Features:
+- Daily ranking
+- Weekly ranking
+- Monthly ranking
+
+Show:
+- Profile picture
+- Username
+- Rank
+- Statistics
+
+------------------------------------------------
+
+12. NOTIFICATION SYSTEM
+
+Create an in-app notification center.
+
+Notifications for:
+
+- New tasks
+- Rewards received
+- Withdrawal updates
+- Achievement unlocked
+- Streak reminders
+- Referral bonuses
+
+Include:
+- Notification icon
+- Read/unread status
+- Notification history
+
+------------------------------------------------
+
+13. ADMIN DASHBOARD
+
+Create a complete admin panel.
+
+Admin features:
+
+Dashboard:
+- Total users
+- Active users
+- Tasks completed
+- Total rewards distributed
+- Pending withdrawals
+
+User management:
+- View users
+- Search users
+- Suspend accounts
+- View user activity
+
+Task management:
+- Create tasks
+- Add videos
+- Set reward amount
+- Set completion timer
+- Activate/deactivate tasks
+
+Financial management:
+- Manage withdrawals
+- View transactions
+- Export reports
+
+------------------------------------------------
+
+14. DATABASE STRUCTURE
+
+Create database tables:
+
+Users
+- id
+- username
+- email
+- password
+- profile picture
+- balance
+- XP
+- level
+- streak count
+
+Tasks
+- id
+- title
+- description
+- video URL
+- reward amount
+- duration
+
+Task Completions
+- user id
+- task id
+- completion date
+
+Transactions
+- user id
+- amount
+- type
+- date
+
+Withdrawals
+- user id
+- amount
+- payment method
+- status
+
+Referrals
+- inviter
+- referred user
+- reward
+
+Achievements
+- badge name
+- description
+- requirements
+
+User Achievements
+
+Notifications
+
+------------------------------------------------
+
+15. PWA MOBILE APP SUPPORT
+
+Convert the website into a Progressive Web App.
+
+Add:
+
+- Install to phone option
+- App icon
+- Splash screen
+- Offline loading
+- Mobile app experience
+- Web manifest
+- Service worker
+
+Users should be able to install it like a normal mobile application.
+
+------------------------------------------------
+
+16. SECURITY
+
+Implement:
+
+- Password hashing
+- Secure authentication
+- Input validation
+- Protected admin routes
+- Fraud prevention
+- Anti-bot protection
+- Secure API endpoints
+
+------------------------------------------------
+
+17. FINAL REQUIREMENTS
+
+The application should look like a professional startup product.
+
+Make it:
+- Fast
+- Secure
+- Scalable
+- Mobile friendly
+- Easy to use
+
+Create all frontend pages, backend APIs, database models, and explain how to run the project on Replit.
