@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: earnview-api
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: "npm install -g pnpm@10 && pnpm install --frozen-lockfile && pnpm run typecheck:libs && pnpm --filter @workspace/api-server run build"
+    startCommand: "node --enable-source-maps artifacts/api-server/dist/index.mjs"
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CLERK_SECRET_KEY
+        sync: false
+      - key: CLERK_PUBLISHABLE_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false

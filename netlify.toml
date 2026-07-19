@@ -1,0 +1,14 @@
+[build]
+  command = "npm install -g pnpm@10 && pnpm install --frozen-lockfile && pnpm run typecheck:libs && pnpm --filter @workspace/earnview run build"
+  publish = "artifacts/earnview/dist/public"
+
+[build.environment]
+  BASE_PATH = "/"
+  PORT = "3000"
+  NODE_VERSION = "20"
+
+# SPA fallback — all routes serve index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
