@@ -1,0 +1,7 @@
+[build]
+nixpacksPlan = ""
+buildCommand = "npm install -g pnpm@10 && pnpm install --frozen-lockfile && pnpm run typecheck:libs && pnpm --filter @workspace/earnview run build && pnpm --filter @workspace/api-server run build"
+
+[deploy]
+startCommand = "node --enable-source-maps artifacts/api-server/dist/index.mjs"
+restartPolicyType = "on_failure"
