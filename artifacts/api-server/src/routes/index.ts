@@ -10,6 +10,7 @@ import leaderboardRouter from "./leaderboard";
 import notificationsRouter from "./notifications";
 import streakRouter from "./streak";
 import adminRouter from "./admin";
+import adsRouter from "./ads";
 
 const router: IRouter = Router();
 
@@ -24,5 +25,6 @@ router.use(leaderboardRouter);
 router.use(notificationsRouter);
 router.use(streakRouter);
 router.use(adminRouter);
+router.use(adsRouter);
 
 export default router;
