@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { ArrowLeft, Clock, ShieldCheck, Trophy, Sparkles } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { useQueryClient } from "@tanstack/react-query";
+import ReactPlayer from "react-player";
 
 export default function TaskDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -24,8 +25,10 @@ export default function TaskDetailPage() {
   const [isActive, setIsActive] = useState(false);
   const [completed, setCompleted] = useState(false);
   const [rewardData, setRewardData] = useState<any>(null);
-  
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const [playing, setPlaying] = useState(false);
+
+  const watchedRef = useRef<number>(0);
+  const playerRef = useRef<any>(null);
 
   useEffect(() => {
     if (task && !task.completedByUser && timeLeft === null && !completed) {
@@ -34,34 +37,38 @@ export default function TaskDetailPage() {
   }, [task, timeLeft, completed]);
 
   useEffect(() => {
+    let timer: NodeJS.Timeout | null = null;
     if (isActive && timeLeft !== null && timeLeft > 0) {
-      timerRef.current = setTimeout(() => {
-        setTimeLeft(prev => (prev !== null ? prev - 1 : 0));
-      }, 1000);
-    } else if (timeLeft === 0 && isActive) {
-      setIsActive(false);
+      timer = setTimeout(() => {
+        // keep countdown in sync with watchedRef if possible
+        const watched = Math.floor(watchedRef.current);
+        const remaining = Math.max(0, task.durationSeconds - watched);
+        setTimeLeft(remaining);
+      }, 500);
     }
-    
+
     return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
+      if (timer) clearTimeout(timer);
     };
-  }, [isActive, timeLeft]);
+  }, [isActive, timeLeft, task]);
 
   const handleStart = () => {
     setIsActive(true);
+    setPlaying(true);
   };
 
   const handleClaim = () => {
     if (!task) return;
-    
+    const watchedDuration = Math.floor(watchedRef.current);
     completeMutation.mutate({
       taskId: task.id,
-      data: { watchedDuration: task.durationSeconds }
+      data: { watchedDuration }
     }, {
       onSuccess: (data) => {
         setCompleted(true);
         setRewardData(data);
-        
+        setPlaying(false);
+        setIsActive(false);
         // Invalidate queries to refresh dashboard and wallet
         queryClient.invalidateQueries({ queryKey: ["/api/dashboard"] });
         queryClient.invalidateQueries({ queryKey: ["/api/wallet"] });
@@ -143,7 +150,10 @@ export default function TaskDetailPage() {
   }
 
   const isCompleted = task.completedByUser;
-  const progressPercent = timeLeft !== null ? ((task.durationSeconds - timeLeft) / task.durationSeconds) * 100 : 0;
+  const minDuration = Math.floor(task.durationSeconds * 0.8);
+  const watched = Math.floor(watchedRef.current);
+  const progressPercent = task.durationSeconds > 0 ? ((watched / task.durationSeconds) * 100) : 0;
+  const canClaim = watched >= minDuration || timeLeft === 0;
 
   return (
     <div className="p-6 md:p-8 max-w-4xl mx-auto space-y-6">
@@ -158,17 +168,40 @@ export default function TaskDetailPage() {
           <Card className="overflow-hidden border-0 shadow-md">
             {task.videoUrl ? (
               <div className="aspect-video bg-slate-900 w-full relative">
-                {/* Simulated video player */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-white/30 text-center">
-                    <p className="text-lg font-medium mb-2">Sponsor Content</p>
-                    <p className="text-sm">Video ID: {task.videoUrl.split('v=')[1] || 'demo'}</p>
-                  </div>
-                </div>
+                <ReactPlayer
+                  ref={playerRef}
+                  url={task.videoUrl}
+                  playing={playing}
+                  controls={true}
+                  width="100%"
+                  height="100%"
+                  onProgress={(state) => {
+                    // state.playedSeconds is a float
+                    watchedRef.current = state.playedSeconds;
+                    const remaining = Math.max(0, task.durationSeconds - Math.floor(state.playedSeconds));
+                    setTimeLeft(remaining);
+                  }}
+                  onEnded={() => {
+                    watchedRef.current = task.durationSeconds;
+                    setTimeLeft(0);
+                    setPlaying(false);
+                    setIsActive(false);
+                  }}
+                />
+
                 {isActive && (
                   <div className="absolute top-4 right-4 bg-black/60 backdrop-blur text-white px-3 py-1.5 rounded-full text-sm font-mono flex items-center gap-2">
                     <span className="h-2 w-2 bg-red-500 rounded-full animate-pulse"></span>
                     Watching...
+                  </div>
+                )}
+
+                {!isActive && (
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div className="text-white/40 text-center pointer-events-auto">
+                      <p className="text-lg font-medium mb-2">Sponsor Content</p>
+                      <p className="text-sm">Video ID: {String(task.videoUrl).split('v=')[1] || 'demo'}</p>
+                    </div>
                   </div>
                 )}
               </div>
@@ -224,7 +257,7 @@ export default function TaskDetailPage() {
                 <Button className="w-full" variant="secondary" disabled>
                   Reward Already Claimed
                 </Button>
-              ) : timeLeft === 0 ? (
+              ) : canClaim ? (
                 <Button 
                   className="w-full h-12 text-base font-bold bg-green-600 hover:bg-green-700 animate-in pulse" 
                   onClick={handleClaim}
@@ -238,7 +271,11 @@ export default function TaskDetailPage() {
                     <span className="text-slate-500">In progress...</span>
                     <span className="text-slate-900 font-mono">{timeLeft}s remaining</span>
                   </div>
-                  <Progress value={progressPercent} className="h-3" />
+                  <Progress value={Math.min(100, progressPercent)} className="h-3" />
+                  <div className="flex gap-2">
+                    <Button variant="outline" onClick={() => { setPlaying(false); setIsActive(false); }}>Pause</Button>
+                    <Button onClick={() => { setPlaying(true); setIsActive(true); }}>Resume</Button>
+                  </div>
                 </div>
               ) : (
                 <Button 
